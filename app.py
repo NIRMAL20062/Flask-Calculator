@@ -10,10 +10,12 @@ def index():
 @app.route('/calc', methods=['POST'])
 def calculator():
     try:
+        # Get input values
         num1 = float(request.form.get('num1'))
         num2 = float(request.form.get('num2'))
         operation = request.form.get('operation')
 
+        # Perform the operation
         if operation == 'add':
             result = num1 + num2
         elif operation == 'sub':
@@ -27,11 +29,12 @@ def calculator():
         else:
             return "Error: Invalid operation!"
 
-        return f"The Answer is: {result:.2f}"
+        # Pass the result to the template
+        return render_template('index.html', result=f"{result:.2f}")
 
     except (TypeError, ValueError):
         return "Error: Invalid input! Please enter numbers."
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))  # Use Render's PORT or default to 5000
-    app.run(host='0.0.0.0', port=port, debug=False)  # Bind to 0.0.0.0 and use the correct port
+    app.run(host='0.0.0.0', port=port, debug=False)
