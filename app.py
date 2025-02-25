@@ -1,25 +1,22 @@
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, render_template
+import os
 
 app = Flask(__name__)
 
-# Serve the HTML file
 @app.route('/')
 def index():
-    return send_from_directory('.', 'index.html')  # Serve index.html from the current directory
+    return render_template('index.html')
 
-# Calculator logic
 @app.route('/calc', methods=['POST'])
 def calculator():
     try:
-        # Get input values
-        num1 = float(request.form.get('num1'))  # Allow decimals
+        num1 = float(request.form.get('num1'))
         num2 = float(request.form.get('num2'))
         operation = request.form.get('operation')
 
-        # Perform the operation
         if operation == 'add':
             result = num1 + num2
-        elif operation == 'sub':  # Ensure this matches the HTML form
+        elif operation == 'sub':
             result = num1 - num2
         elif operation == 'multi':
             result = num1 * num2
@@ -30,10 +27,11 @@ def calculator():
         else:
             return "Error: Invalid operation!"
 
-        return f"The Answer is: {result:.2f}"  # Formatting result to 2 decimal places
+        return f"The Answer is: {result:.2f}"
 
     except (TypeError, ValueError):
         return "Error: Invalid input! Please enter numbers."
 
 if __name__ == '__main__':
-    app.run(debug=False)  # Set debug to False for deployment
+    port = int(os.environ.get('PORT', 5000))  # Use Render's PORT or default to 5000
+    app.run(host='0.0.0.0', port=port, debug=False)
