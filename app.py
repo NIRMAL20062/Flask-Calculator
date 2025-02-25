@@ -1,11 +1,13 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, send_from_directory
 
 app = Flask(__name__)
 
+# Serve the HTML file
 @app.route('/')
 def index():
-    return render_template('index.html')  # Serve the HTML form
+    return send_from_directory('.', 'index.html')  # Serve index.html from the current directory
 
+# Calculator logic
 @app.route('/calc', methods=['POST'])
 def calculator():
     try:
